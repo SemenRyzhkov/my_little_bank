@@ -1,6 +1,11 @@
 package com.ryzhkov.spring.my_little_bank.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -12,18 +17,24 @@ public class User {
     @Column(name = "id")
     private int id;
 
+    @Size(min = 2, message = "Name must be contain min 2 symbols")
     @Column(name = "fullname")
     private String fullName;
 
+    @Pattern(regexp = "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$", message = "Please, enter correct email")
     @Column(name = "email")
     private String email;
 
+    @Pattern(regexp = "\\d{3}-\\d{2}-\\d{2}", message = "Please, use pattern XXX-XX-XX")
     @Column(name = "phone")
     private String phone;
 
+    @Size(min = 10, message = "Address must be contain min 10 symbols")
     @Column(name = "address")
     private String address;
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 

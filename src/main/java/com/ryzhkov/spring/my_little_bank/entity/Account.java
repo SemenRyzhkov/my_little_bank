@@ -26,8 +26,9 @@ public class Account {
     @JoinColumn(name = "owner")
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "account")
-
+    @OneToMany(cascade = {CascadeType.PERSIST
+            , CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}
+            , mappedBy = "account")
     private List<Transaction> transactions;
 
     public Account() {
