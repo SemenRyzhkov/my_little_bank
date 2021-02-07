@@ -1,9 +1,9 @@
 package com.ryzhkov.spring.my_little_bank.controller;
 
+import com.ryzhkov.spring.my_little_bank.entity.Account;
 import com.ryzhkov.spring.my_little_bank.entity.User;
 import com.ryzhkov.spring.my_little_bank.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,16 +40,34 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public User addEmployee(@RequestBody User user) {
+    public User add(@RequestBody User user) {
         service.save(user);
         return user;
     }
 
     @PutMapping("/users")
-    public User updateEmployee(@RequestBody User user) {
+    public User update(@RequestBody User user) {
         service.save(user);
         return user;
     }
 
+    @GetMapping("/users/accounts/{id}")
+    public List<Account> showAllAccounts(@PathVariable int id) {
+        return service.getAllAccounts(id);
+    }
+
+
+
+    @PostMapping("/users/accounts/add/{userId}")
+    public Account addAccount(@RequestBody Account account, @PathVariable int userId) {
+        service.saveAccount(account, userId);
+        return account;
+    }
+
+    @DeleteMapping("/users/accounts/delete/{userId}/{accountNumber}")
+    public String deleteAccount(@PathVariable int userId, @PathVariable int accountNumber) {
+        service.deleteAccount(userId, accountNumber);
+        return "Account with number = " + accountNumber + " was deleted";
+    }
 }
 

@@ -20,7 +20,7 @@ public class Transaction {
     @Column(name = "amount")
     private float amount;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "account")
     private Account account;
 

@@ -9,7 +9,6 @@ import java.util.List;
 @Table(name = "accounts")
 public class Account {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_number")
     private int accountNumber;
 
@@ -22,19 +21,18 @@ public class Account {
     @Column(name = "validity_period")
     LocalDate validityPeriod;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "owner")
     private User user;
 
-    @OneToMany(cascade = {CascadeType.PERSIST
-            , CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}
-            , mappedBy = "account")
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "account")
     private List<Transaction> transactions;
 
     public Account() {
     }
 
-    public Account(float amount, LocalDate openingDate, LocalDate validityPeriod) {
+    public Account(int accountNumber, float amount, LocalDate openingDate, LocalDate validityPeriod) {
+        this.accountNumber = accountNumber;
         this.amount = amount;
         this.openingDate = openingDate;
         this.validityPeriod = validityPeriod;
@@ -72,12 +70,12 @@ public class Account {
         this.validityPeriod = validityPeriod;
     }
 
-    @Override
-    public String toString() {
-        return "Account{" +
-                "amount=" + amount +
-                ", openingDate=" + openingDate +
-                ", validityPeriod=" + validityPeriod +
-                '}';
+//    public User getUser() {
+//        return user;
+//    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
+
 }

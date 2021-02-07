@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -29,7 +30,7 @@ public class User {
     @Column(name = "phone")
     private String phone;
 
-    @Size(min = 10, message = "Address must be contain min 10 symbols")
+    @Size(min = 1, message = "Address must be contain min 10 symbols")
     @Column(name = "address")
     private String address;
 
@@ -38,7 +39,7 @@ public class User {
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
     private List<Account> accounts;
 
     public User() {
@@ -100,15 +101,26 @@ public class User {
         this.dateOfBirth = dateOfBirth;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", fullName='" + fullName + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", address='" + address + '\'' +
-                ", dateOfBirth=" + dateOfBirth +
-                '}';
+    public List<Account> getAccounts() {
+        return accounts;
     }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
+    }
+
+    public void addAccount(Account account) {
+        if (accounts == null) {
+            accounts = new ArrayList<>();
+        }
+        accounts.add(account);
+        account.setUser(this);
+    }
+
+    public void deleteAccount(Account account) {
+        if (!accounts.isEmpty()) {
+            this.accounts.remove(account);
+        }
+    }
+
 }
