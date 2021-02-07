@@ -56,8 +56,6 @@ public class UserController {
         return service.getAllAccounts(id);
     }
 
-
-
     @PostMapping("/users/accounts/add/{userId}")
     public Account addAccount(@RequestBody Account account, @PathVariable int userId) {
         service.saveAccount(account, userId);

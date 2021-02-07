@@ -3,6 +3,7 @@ package com.ryzhkov.spring.my_little_bank.entity;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,7 +26,7 @@ public class Account {
     @JoinColumn(name = "owner")
     private User user;
 
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "account")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "account")
     private List<Transaction> transactions;
 
     public Account() {
@@ -70,12 +71,16 @@ public class Account {
         this.validityPeriod = validityPeriod;
     }
 
-//    public User getUser() {
-//        return user;
-//    }
-
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public void addTransaction(Transaction transaction) {
+        if (transactions == null) {
+            transactions = new ArrayList<>();
+        }
+        transactions.add(transaction);
+        transaction.setAccount(this);
     }
 
 }
