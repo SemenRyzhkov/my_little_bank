@@ -68,4 +68,14 @@ public class Transaction {
     public void setAccount(Account account) {
         this.account = account;
     }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "id=" + id +
+                ", type='" + type + '\'' +
+                ", dateTime=" + dateTime +
+                ", amount=" + amount +
+                '}';
+    }
 }

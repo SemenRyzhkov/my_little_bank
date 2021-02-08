@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
@@ -60,8 +61,12 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Collection<Transaction> getAccountOperationByPeriod(int accountId, LocalDateTime start, LocalDateTime end) {
-        return transactionRepository.getTransactionsByAccount_AccountNumberAndDateTimeBetween(accountId, start, end);
+    public List<Transaction> getAccountOperationByPeriod(int accountNumber, LocalDateTime start, LocalDateTime end) {
+        return transactionRepository
+                .getTransactionsByAccount_AccountNumber(accountNumber)
+                .stream()
+                .filter(tr -> isBetweenHalfOpen(tr.getDateTime(), start, end))
+                .collect(Collectors.toList());
     }
 
     private boolean checkValidityPeriod(LocalDate localDate) {
@@ -80,5 +85,9 @@ public class TransactionServiceImpl implements TransactionService {
             account.setAmount(sum);
             accountRepository.save(account);
         }
+    }
+
+    private static boolean isBetweenHalfOpen(LocalDateTime ld, LocalDateTime startDate, LocalDateTime endDate) {
+        return ld.compareTo(startDate) >= 0 && ld.compareTo(endDate) <= 0;
     }
 }

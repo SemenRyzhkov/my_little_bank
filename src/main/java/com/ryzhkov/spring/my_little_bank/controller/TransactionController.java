@@ -1,6 +1,7 @@
 package com.ryzhkov.spring.my_little_bank.controller;
 
 import com.ryzhkov.spring.my_little_bank.entity.Transaction;
+import com.ryzhkov.spring.my_little_bank.entity.User;
 import com.ryzhkov.spring.my_little_bank.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,7 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
-@RequestMapping("api")
+@RequestMapping("/api")
 public class TransactionController {
     @Autowired
     TransactionService transactionService;
@@ -35,11 +36,15 @@ public class TransactionController {
     }
 
     @GetMapping("/transaction/{accountId}/{start}/{end}")
-    public List<Transaction> showAllUsers(@PathVariable int accountId
+    public List<Transaction> showAllTransaction(@PathVariable int accountId
             , @PathVariable String start, @PathVariable String end) {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime startDate = LocalDateTime.parse(start, dateTimeFormatter);
         LocalDateTime endDate = LocalDateTime.parse(end, dateTimeFormatter);
-        return (List<Transaction>) transactionService.getAccountOperationByPeriod(accountId, startDate, endDate);
+        List<Transaction> transactions = (List<Transaction>) transactionService
+                .getAccountOperationByPeriod(accountId, startDate, endDate);
+        System.out.println(transactions);
+        return transactions;
     }
+
 }

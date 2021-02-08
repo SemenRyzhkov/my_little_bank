@@ -7,6 +7,5 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
-     List<Transaction> getTransactionsByAccount_AccountNumberAndDateTimeBetween(int accountNumber,
-            LocalDateTime startDateTime, LocalDateTime endDateTime);
+     List<Transaction> getTransactionsByAccount_AccountNumber(int accountNumber);
 }
